@@ -1,0 +1,17 @@
+<!--pages/profile/index.wxml-->
+<view class="container" style="background-image: url('../../assets/img/bg.jpg')">
+  <view class="title" style="margin-bottom: 20rpx;">User Page</view>
+  <view class="title" style="margin-bottom: 20rpx;">
+    <text wx:if="{{userInfo}}">Hey, {{userInfo.nickname}}</text>
+    <text wx:else>Not logged in.</text>
+  </view>
+  <view wx:if="{{!userInfo}}" class="title" style="margin-bottom: 20rpx;">
+    <button open-type="getUserInfo" bindgetuserinfo="userInfoHandler" type="primary">Login</button>
+  </view>
+  <view class="list">
+    <view class="item" wx:for="{{orders}}" wx:for-item="order" wx:key="{{order.id}}">
+      <text>Product Name: {{order.productId.title}}</text>
+      <text>Product Price: {{order.productId.price}}</text>
+    </view>
+  </view>
+</view>

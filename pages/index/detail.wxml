@@ -1,0 +1,41 @@
+<!--index.wxml-->
+<view class="container" style="background-image: url('../../assets/img/bg.jpg')">
+  <view class="title">
+    {{movie.title}}
+  </view>
+  <view class="title">Products</view>
+  <view class="list">
+    <block wx:for="{{products}}" wx:for-item="product" wx:key="{{product.id}}">
+      <view class="item" bindtap="placeOrder" id="{{product.id}}">
+        
+        <text class="number">¥{{product.price}}</text>
+        <text class="name">{{product.title}}</text>
+      </view>
+    </block>
+  </view>
+  <scroll-view scroll-y="{{true}}" enable-flex="{{true}}" scroll-into-view="{{scrollInto}}" scroll-with-animation="{{true}}" style="height: 800rpx" class="list">
+    <view wx:for="{{items}}" id="item-{{it.id}}" wx:for-item="it" wx:key="id" wx:for-index="idx" class="item">
+      <view class="name">
+        <text>{{it.text}}</text>
+        <text style="margin-left: 50rpx;">{{it.rating}}</text>
+      </view>
+    </view>
+  </scroll-view>
+  <block wx:if="{{userInfo}}">
+    <form bindreset="formReset">
+      <view class="add-movie">
+        <input class="input" name="input" bindinput="inputChange" bindconfirm="formReset" placeholder="Input your comment" />
+        <picker mode="selector" range="{{[1,2,3,4,5]}}" 
+          bindchange="onRatingChange">
+          RATING
+        </picker>
+      </view>
+      <button form-type="reset">Submit</button>
+    </form>
+  </block>
+  <block wx:else>
+    <view class="title">
+      <button open-type="getUserInfo" bindgetuserinfo="userInfoHandler" type="primary">Login</button>
+    </view>
+  </block>
+</view>
