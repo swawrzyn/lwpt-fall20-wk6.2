@@ -13,6 +13,7 @@ Page({
     inputVal: "",
     inputRating: 1,
     userInfo: null,
+    image: null,
   },
   onLoad: function (options) {
     // get currentUser information
@@ -55,20 +56,23 @@ Page({
         });
       });
 
-
     // Get All Movie Products
     const productQuery = new wx.BaaS.Query();
 
-    productQuery.compare('movieId', '=', options.id);
+    productQuery.compare("movieId", "=", options.id);
 
-    MovieProducts.setQuery(productQuery).find().then((res) => {
-      this.setData({
-        products: res.data.objects,
-      })
-    }, (err) => {
-      console.log('product get error', err);
-    })
-    
+    MovieProducts.setQuery(productQuery)
+      .find()
+      .then(
+        (res) => {
+          this.setData({
+            products: res.data.objects,
+          });
+        },
+        (err) => {
+          console.log("product get error", err);
+        }
+      );
   },
   inputChange: function (e) {
     this.setData({
@@ -134,33 +138,87 @@ Page({
     });
   },
 
-  placeOrder: function(e) {
+  placeOrder: function (e) {
     const productId = e.currentTarget.id;
 
-    const MovieOrder = new wx.BaaS.TableObject('movie_orders');
+    const MovieOrder = new wx.BaaS.TableObject("movie_orders");
 
     const newOrder = MovieOrder.create();
 
     newOrder.set({
-      productId: productId
+      productId: productId,
     });
 
-    newOrder.save().then((res) => {
-      wx.showModal({
-        title: 'Success!',
-        content: 'The product was ordered!',
-        showCancel: false,
-        confirmText: '确定',
-        confirmColor: '#3CC51F',
-      });
-    }, (err) => {
-      wx.showModal({
-        title: 'Fail!',
-        content: 'There was a problem.',
-        showCancel: false,
-        confirmText: '确定',
-        confirmColor: '#3CC51F',
-      });
+    newOrder.save().then(
+      (res) => {
+        wx.showModal({
+          title: "Success!",
+          content: "The product was ordered!",
+          showCancel: false,
+          confirmText: "确定",
+          confirmColor: "#3CC51F",
+        });
+      },
+      (err) => {
+        wx.showModal({
+          title: "Fail!",
+          content: "There was a problem.",
+          showCancel: false,
+          confirmText: "确定",
+          confirmColor: "#3CC51F",
+        });
+      }
+    );
+  },
+  getPhoto: function (e) {
+    console.log("take a photo!");
+    wx.chooseImage({
+      count: 1,
+      sizeType: ['original','compressed'],
+      sourceType: ['album'],
+      success: (result)=>{
+        console.log('getPhoto success', result);
+        // this.setData({
+        //   image: result.tempFilePaths[0],
+        // })
+        const File = new wx.BaaS.File();
+        const fileParams = {filePath: result.tempFilePaths[0]};
+        const metadata = {categoryName: "movie_testing"};
+
+        File.upload(fileParams, metadata).then((res) => {
+          console.log('upload image res', res);
+          const Movies = new wx.BaaS.TableObject('movies');
+
+          const movie = Movies.getWithoutData(this.data.movie.id);
+
+          movie.set({
+            image: res.data.path,
+          })
+
+          movie.update().then((res) => {
+            console.log('movie save res', res);
+            this.setData({
+              movie: res.data,
+            })
+          }, err => {
+            console.log('movie update err', err);
+          })
+
+
+        }, err => {
+          console.log('upload err', err);
+        })
+      },
+      fail: (err)=>{
+        console.log('getPhoto err', err);
+      },
+      complete: ()=>{}
+    });
+  },
+  previewImage: function() {
+    wx.previewImage({
+      current: this.data.image, // The http link of the current image
+      urls: [this.data.image] // The http links of the images to preview
     })
-  }
+  },
 });

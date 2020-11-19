@@ -36,8 +36,8 @@
   },
   "compileType": "miniprogram",
   "libVersion": "2.14.0",
-  "appid": "wxfb2d864834e64b71",
-  "projectname": "lwpt-fall20-wk5.3",
+  "appid": "wxb6b20191fa858a06",
+  "projectname": "lwpt-fall20-wk6.2",
   "debugOptions": {
     "hidedInDevtools": []
   },
@@ -69,16 +69,17 @@
       "current": -1,
       "list": [
         {
-          "id": -1,
+          "id": 0,
           "name": "pages/index/detail",
           "pathName": "pages/index/detail",
-          "query": "",
+          "query": "id=5fb650c0057acc141b5e1998",
           "scene": null
         },
         {
           "id": -1,
           "name": "pages/profile/index",
           "pathName": "pages/profile/index",
+          "query": "",
           "scene": null
         }
       ]

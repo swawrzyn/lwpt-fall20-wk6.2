@@ -3,7 +3,12 @@
   <view class="title">
     {{movie.title}}
   </view>
-  <view class="title">Products</view>
+  <view class="title">
+    <button wx:if="{{!movie.image}}" type="primary" bindtap="getPhoto">Choose Image</button>
+    <image wx:else src="{{movie.image}}" mode="aspectFit" bindtap="previewImage">
+    </image>
+  </view>
+  <!-- <view class="title">Products</view>
   <view class="list">
     <block wx:for="{{products}}" wx:for-item="product" wx:key="{{product.id}}">
       <view class="item" bindtap="placeOrder" id="{{product.id}}">
@@ -12,7 +17,7 @@
         <text class="name">{{product.title}}</text>
       </view>
     </block>
-  </view>
+  </view> -->
   <scroll-view scroll-y="{{true}}" enable-flex="{{true}}" scroll-into-view="{{scrollInto}}" scroll-with-animation="{{true}}" style="height: 800rpx" class="list">
     <view wx:for="{{items}}" id="item-{{it.id}}" wx:for-item="it" wx:key="id" wx:for-index="idx" class="item">
       <view class="name">
